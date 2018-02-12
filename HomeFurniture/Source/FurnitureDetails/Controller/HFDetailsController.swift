@@ -131,7 +131,7 @@ class HFDetailsController: UIViewController {
             let alert = UIAlertController(title: AlertConstants.error,
                                           message: AlertConstants.noCameraOnDevice,
                                           preferredStyle: .alert)
-            alert.show(self, sender: nil)
+            self.present(alert, animated: true, completion: nil)
             return
         }
         
@@ -216,11 +216,11 @@ class HFDetailsController: UIViewController {
         if detailsVCType != .edit
             && CoreDataHelper.shared().isPresent(furnitureWithTitle: titleTextField.text!) {
             handleDuplicateEntry(imageData: imageData)
-            return
+        }else {
+            addFurniture(title: self.titleTextField.text!,
+                         imageData: imageData,
+                         detail: self.detailsTextField.text)
         }
-        addFurniture(title: self.titleTextField.text!,
-                     imageData: imageData,
-                     detail: self.detailsTextField.text)
     }
     
 
