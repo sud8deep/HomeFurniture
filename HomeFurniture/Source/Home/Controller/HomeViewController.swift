@@ -16,7 +16,6 @@ class HomeViewController: UIViewController {
     private let numberOfItemsInARow = 2
     private let homeCellIdentifier = "HomeCollectionViewCell"
     private let hfDetailsVCIdentifier = "HFDetailsController"
-    private var furnitureDetailsVC: HFDetailsController?
     private var alertActionSheet: UIAlertController?
     
     override func viewDidLoad() {
@@ -47,7 +46,6 @@ class HomeViewController: UIViewController {
 
     private func initialize() {
         initialiseNavBar()
-        initialiseHFDetailsVC()
         initializeActionSheet()
         registerCells()
     }
@@ -59,12 +57,21 @@ class HomeViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = addBarButton
     }
     
-    private func initialiseHFDetailsVC() {
+    private func pushHFDetailsViewController(detailsVCType: HFDetailsVCType,
+                                             sourceType: UIImagePickerControllerSourceType?,
+                                             furnitureInfo: FurnitureInfo?) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         guard let hfDetailsVC = (storyboard.instantiateViewController(
             withIdentifier: hfDetailsVCIdentifier) as? HFDetailsController) else {return}
-        furnitureDetailsVC = hfDetailsVC
-        furnitureDetailsVC?.delegate = self
+        hfDetailsVC.delegate = self
+        hfDetailsVC.detailsVCType = detailsVCType
+        
+        if furnitureInfo != nil {
+            hfDetailsVC.furnitureInfo = furnitureInfo
+        } else {
+            hfDetailsVC.sourceType = sourceType == nil ? .camera : sourceType!
+        }
+        self.navigationController?.pushViewController(hfDetailsVC, animated: true)
     }
     
     private func initializeActionSheet() {
@@ -99,10 +106,9 @@ class HomeViewController: UIViewController {
     }
     
     private func addFurniture(imageSource: UIImagePickerControllerSourceType) {
-        furnitureDetailsVC?.furnitureInfo = nil
-        furnitureDetailsVC?.isNewEntry = true
-        furnitureDetailsVC?.sourceType = imageSource
-        self.navigationController?.pushViewController(furnitureDetailsVC!, animated: true)
+        self.pushHFDetailsViewController(detailsVCType: .addNew,
+                                         sourceType: imageSource,
+                                         furnitureInfo: nil)
     }
     
 }
@@ -134,8 +140,9 @@ extension HomeViewController: UICollectionViewDataSource {
                                       style: .default,
                                       handler:
             { (action) in
-                self.furnitureDetailsVC?.furnitureInfo = info
-                self.navigationController?.pushViewController(self.furnitureDetailsVC!, animated: true)
+                self.pushHFDetailsViewController(detailsVCType: .edit,
+                                                 sourceType: nil,
+                                                 furnitureInfo: info)
         }))
         alert.addAction(UIAlertAction(title: AlertConstants.deleteFurniture,
                                       style: .default,

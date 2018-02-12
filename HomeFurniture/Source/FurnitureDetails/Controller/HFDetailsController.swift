@@ -9,13 +9,25 @@
 import Foundation
 import UIKit
 
+enum HFDetailsVCType {
+    case addNew
+    case edit
+    case invalid
+}
+
 protocol HFDetailsControllerDelegate {
     func hfDetailsController(sender: HFDetailsController,
                              updated furnitureInfo: FurnitureInfo)
 }
 
 class HFDetailsController: UIViewController {
-    var isNewEntry = false
+    var detailsVCType: HFDetailsVCType = .invalid {
+        didSet {
+            if detailsVCType != .invalid {
+                shouldUpdateView = true
+            }
+        }
+    }
     var sourceType: UIImagePickerControllerSourceType = .camera
     var delegate: HFDetailsControllerDelegate?
     var furnitureInfo: FurnitureInfo?
@@ -26,11 +38,15 @@ class HFDetailsController: UIViewController {
     
     private var image: UIImage? {
         didSet {
-            guard let _ = image else {return}
+            guard let _ = image else {
+                imageView.image = nil
+                return
+            }
             imageView.image = image
         }
     }
     private var imagePath: URL?
+    private var shouldUpdateView = false
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -49,29 +65,37 @@ class HFDetailsController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.title = "Furniture Info"
-        if isNewEntry {
-            isNewEntry = false
-            titleTextField.text = nil
-            detailsTextField.text = nil
-            image = nil
-            imageView.image = nil
-            presentPickerController(animated: true)
-        } else if furnitureInfo != nil {
-            guard let title = furnitureInfo?.title,
-                let imageData = furnitureInfo?.imageData else {return}
-            titleTextField.text = title
-            image = UIImage(data: imageData)
-            detailsTextField.text = (furnitureInfo?.detail?.isEmpty)! ? "" : furnitureInfo?.detail
+        if shouldUpdateView {
+            shouldUpdateView = false
+            
+            switch detailsVCType {
+            case .addNew:
+                titleTextField.text = nil
+                detailsTextField.text = nil
+                image = nil
+                imageView.image = nil
+                presentPickerController(animated: true)
+                break
+            case .edit:
+                guard let _ = furnitureInfo,
+                    let _ = furnitureInfo?.title,
+                    let _ = furnitureInfo?.imageData else {return}
+                titleTextField.text = furnitureInfo?.title
+                detailsTextField.text = furnitureInfo?.detail
+                image = UIImage(data: (furnitureInfo?.imageData)!)
+                break
+            case .invalid:
+                break
+            }
         }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
     private func initialiseNavBar() {
-        //        let backButton = UIBarButtonItem(title: "Back", style: .done, target: nil, action: nil)
-        self.navigationItem.backBarButtonItem?.title = "Back"
+        let backButton = UIBarButtonItem(title: "Back",
+                                         style: .plain,
+                                         target: self,
+                                         action: #selector(HFDetailsController.backButtonClicked(sender:)))
+        self.navigationItem.leftBarButtonItem = backButton
     }
     
     private func initialiseView() {
@@ -99,7 +123,7 @@ class HFDetailsController: UIViewController {
                                                                           imageData: imageData)
         }
         delegate?.hfDetailsController(sender: self, updated: furnitureInfo!)
-        self.navigationController?.popViewController(animated: true)
+        backButtonClicked(sender: nil)
     }
     
     private func presentPickerController(animated: Bool) {
@@ -159,6 +183,14 @@ class HFDetailsController: UIViewController {
         }
     }
     
+    @objc func backButtonClicked(sender: Any?) {
+        furnitureInfo = nil
+        titleTextField.text = nil
+        detailsTextField.text = nil
+        image = nil
+        self.navigationController?.popViewController(animated: true)
+    }
+    
     @IBAction func saveButtonClicked(_ sender: Any) {
         titleTextField.resignFirstResponder()
         detailsTextField.resignFirstResponder()
@@ -166,22 +198,23 @@ class HFDetailsController: UIViewController {
             let alert = UIAlertController(title: AlertConstants.error,
                                           message: AlertConstants.enterTitle,
                                           preferredStyle: .alert)
-            alert.show(self, sender: nil)
+            self.present(alert, animated: true, completion: nil)
             return
         }
         guard let _ = image else {
             let alert = UIAlertController(title: AlertConstants.error,
                                           message: AlertConstants.noImage,
                                           preferredStyle: .alert)
-            alert.show(self, sender: nil)
+            self.present(alert, animated: true, completion: nil)
             return
         }
-        guard let imageData = UIImageJPEGRepresentation(image!, 0.5) else {
+        guard let imageData = UIImageJPEGRepresentation(image!, AppConstants.imageCompressionRatio) else {
             print("Failed to convert image")
             return
         }
         
-        if CoreDataHelper.shared().isPresent(furnitureWithTitle: titleTextField.text!) {
+        if detailsVCType != .edit
+            && CoreDataHelper.shared().isPresent(furnitureWithTitle: titleTextField.text!) {
             handleDuplicateEntry(imageData: imageData)
             return
         }

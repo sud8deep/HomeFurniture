@@ -7,6 +7,13 @@
 //
 
 import Foundation
+import UIKit
+
+class AppConstants {
+    static let imageCompressionRatio: CGFloat = 0.4
+    
+    private init() {}
+}
 
 class CoreDataConstants {
     static let dataModel = "HomeFurniture"
