@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="FBh-hp-tg4" customClass="HomeCollectionViewCell" customModule="HomeFurniture" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="269" height="284"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                <rect key="frame" x="0.0" y="0.0" width="269" height="284"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qx0-26-Dto">
+                        <rect key="frame" x="0.0" y="0.0" width="269" height="196"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="Qx0-26-Dto" secondAttribute="height" multiplier="269:196" id="4R2-ju-Hfa"/>
+                        </constraints>
+                    </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Nuvolo Laptop Table" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ifk-IL-dgH">
+                        <rect key="frame" x="68.5" y="206" width="132.5" height="30"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="30" id="alb-Do-w8M"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label skjdhkjsad kjshdkjs dksjhdksj d sdjsjadhs skjdhjsakd skajdhsajk d" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cvU-eL-uz2">
+                        <rect key="frame" x="8" y="244" width="253" height="32"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                </subviews>
+            </view>
+            <constraints>
+                <constraint firstAttribute="trailing" secondItem="cvU-eL-uz2" secondAttribute="trailing" constant="8" id="0xd-VK-kjY"/>
+                <constraint firstItem="Qx0-26-Dto" firstAttribute="top" secondItem="FBh-hp-tg4" secondAttribute="top" id="7be-6Q-kmI"/>
+                <constraint firstItem="Qx0-26-Dto" firstAttribute="centerX" secondItem="FBh-hp-tg4" secondAttribute="centerX" id="7mM-lI-Pf7"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Ifk-IL-dgH" secondAttribute="trailing" constant="8" id="FE5-eg-feI"/>
+                <constraint firstItem="Qx0-26-Dto" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FBh-hp-tg4" secondAttribute="leading" id="LhR-dU-upj"/>
+                <constraint firstItem="Ifk-IL-dgH" firstAttribute="top" secondItem="Qx0-26-Dto" secondAttribute="bottom" constant="10" id="N7x-X5-ic0"/>
+                <constraint firstItem="Ifk-IL-dgH" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="FBh-hp-tg4" secondAttribute="leading" constant="8" id="RH0-R1-oMh"/>
+                <constraint firstItem="cvU-eL-uz2" firstAttribute="top" secondItem="Ifk-IL-dgH" secondAttribute="bottom" constant="8" id="fzV-cq-cKQ"/>
+                <constraint firstItem="Ifk-IL-dgH" firstAttribute="centerX" secondItem="Qx0-26-Dto" secondAttribute="centerX" id="hYW-VH-ZGh"/>
+                <constraint firstAttribute="bottom" secondItem="cvU-eL-uz2" secondAttribute="bottom" constant="8" id="kwV-N8-GYb"/>
+                <constraint firstAttribute="trailing" relation="greaterThanOrEqual" secondItem="Qx0-26-Dto" secondAttribute="trailing" id="pJ8-Qd-RQ9"/>
+                <constraint firstItem="cvU-eL-uz2" firstAttribute="leading" secondItem="FBh-hp-tg4" secondAttribute="leading" constant="8" id="vjr-wr-nuH"/>
+            </constraints>
+            <size key="customSize" width="279" height="320"/>
+            <connections>
+                <outlet property="detailLabel" destination="cvU-eL-uz2" id="ydW-R0-opH"/>
+                <outlet property="imageView" destination="Qx0-26-Dto" id="cZa-9t-57B"/>
+                <outlet property="titleLabel" destination="Ifk-IL-dgH" id="xtU-NX-0hf"/>
+            </connections>
+            <point key="canvasLocation" x="-96.5" y="-23"/>
+        </collectionViewCell>
+    </objects>
+</document>
